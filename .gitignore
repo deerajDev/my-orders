@@ -9,6 +9,7 @@
 [Ss]cripts
 pyvenv.cfg
 .venv
+tcl
 pip-selfcheck.json
 
 # Byte-compiled / optimized / DLL files
@@ -117,6 +118,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
 
 # Spyder project settings
 .spyderproject
