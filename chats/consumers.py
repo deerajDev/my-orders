@@ -51,7 +51,6 @@ class ChatConsumer(WebsocketConsumer):
         try:
             data, send_method = self.callBacks[parsed_data['command']](
                             parsed_data['data'])
-
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {'type': send_method,
@@ -68,7 +67,7 @@ class ChatConsumer(WebsocketConsumer):
         shop_id = self.room_name
         order_type = new_order['order_type']
         description = new_order['description']
-        new_order = Order.objects.create(item_id = item_id, shop_id=shop_id, order_type=order_type)
+        new_order = Order.objects.create(item_id = item_id, shop_id=shop_id, order_type=order_type, description=description)
         serialzed_new_order = { 'id':new_order.id ,   'name':new_order.item.name, 'order_type':new_order.order_type, 'description': new_order.description}
         return (serialzed_new_order, 'sendNewOrder')
 
@@ -84,7 +83,7 @@ class ChatConsumer(WebsocketConsumer):
             return self.notifyUser('Invalid data or item exist', 'error')
 
     def orderCompleted(self, data):
-        order_id = data['id']
+        order_id = data
         order = Order.objects.filter(pk=order_id)[0]
         order.pending = False
         order.save()
@@ -93,7 +92,9 @@ class ChatConsumer(WebsocketConsumer):
 
     def sendNewOrder(self, data):
         return self.send(json.dumps({
-            'order':{'id':  data['data']['id'] , 'name': data['data']['name'] , 'order_type' : data['data']['order_type']},
+            'order':{'id':  data['data']['id'] , 'item_name': data['data']['name'] ,
+             'order_type' : data['data']['order_type'],
+                     'description': data['data']['description']},
             'command': 'receiveNewOrder'
         }))
     
