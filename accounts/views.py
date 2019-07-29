@@ -17,14 +17,16 @@ class ShopRegisterAPIView(GenericAPIView):
     permission_classes = []
 
     def post(self, request, *args, **kwargs):
-        email = request.data['owner.email']
-        password = request.data['owner.password']
+        print(request.data)
+        email = request.data['email']
+        password = request.data['password']
         shop_name = request.data['shop_name']
         data = {'owner': {'email': email, 'password': password},
                 'shop_name': shop_name}
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         shop = serializer.create(serializer.validated_data)
+        print(shop)
         return Response({
             "shop": {
                 "shop_id": shop.shop_id,
@@ -43,7 +45,7 @@ class LoginOwnerAPIView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             shop = Shop.objects.filter(owner__email=request.data['email'])[0]
-
+            print(shop)
             return Response({
                 'shop': {
                     'shop_name': shop.shop_name,

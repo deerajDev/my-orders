@@ -35,3 +35,16 @@ class FoodItemCreate(CreateAPIView):
         except Exception as e:
             raise serializers.ValidationError(
                 'Data already exist or shop id is wrong..')
+    @staticmethod
+    def parseItems(items):
+        items_list = []
+        for item in items:
+            item_dict = {}
+            item_dict['name'] = item.name
+            items_list.append(item_dict)
+        return items_list
+
+
+
+#utils function
+

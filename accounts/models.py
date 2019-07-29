@@ -52,8 +52,7 @@ class User(AbstractUser):
 #Shop class
 class Shop(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
-    shop_name = models.CharField(
-        max_length=100, unique=True, blank=False, null=False)
+    shop_name = models.CharField(max_length=100, unique=True, blank=False, null=False)
     shop_id = models.CharField(
         max_length=50, unique=True, null=False, blank=False)
 
